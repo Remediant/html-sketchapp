@@ -24,6 +24,8 @@ const injectedScriptPath = './dist/inject.bundle.js';
 const isTravis = 'TRAVIS' in process.env && 'CI' in process.env;
 const args = isTravis ? ['--no-sandbox', '--disable-setuid-sandbox'] : [];
 
+const SKIP_SHADOW_DOM = true || isTravis;
+
 const testedMehtods = ['nodeToSketchLayers', 'nodeTreeToSketchPage'];
 
 let testBrowser = null;
@@ -124,7 +126,7 @@ if (testFile !== null) {
 
 const testResults = fs.readdirSync(TESTS_FOLDER)
   .filter(file => {
-    if (isTravis && file === 'shadow-dom.html') {
+    if (file === 'shadow-dom.html' && SKIP_SHADOW_DOM) {
       // shadow DOM test is extremely flaky, for now we just skip it on CI
       return false;
     }
